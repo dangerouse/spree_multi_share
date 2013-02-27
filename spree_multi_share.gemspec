@@ -3,8 +3,8 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_multi_share'
   s.version     = '1.3.1'
-  s.summary     = 'TODO: Add gem summary here'
-  s.description = 'TODO: Add (optional) gem description here'
+  s.summary     = 'Extension for Spree that allows customers to share products for store credit.'
+  s.description = 'Extension for Spree that allows customers to share products with their cloud friends for store credit. Powered by CloudSponge.'
   s.required_ruby_version = '>= 1.8.7'
 
   s.author    = 'Derek Sweet'
