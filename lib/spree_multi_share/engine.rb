@@ -5,7 +5,7 @@ module SpreeCloudsponge
   class Engine < Rails::Engine
     require 'spree/core'
     isolate_namespace Spree
-    engine_name 'spree_cloudsponge'
+    engine_name 'spree_multi_share'
 
     config.autoload_paths += %W(#{config.root}/lib)
 
