@@ -1,0 +1,150 @@
+<h1><%= t('cloudsponge.tell_about', :product => @object.name) %></h1>
+<br/>
+<%= form_for(@mail_to_cloud, :url => email_to_cloud_path(params[:type], @object)) do |f| -%>
+    <%= render 'spree/shared/error_messages', :target => @mail_to_cloud %>
+  
+	<b><%= f.label(:sender_name, t('cloudsponge.sender_name')) %></b><br/><%= f.text_field(:sender_name) %><br/>
+	<br/>
+	<b><%= f.label(:sender_email, t('cloudsponge.sender_email')) %></b><br/><%= f.text_field(:sender_email) %><br/>
+	<br/>
+	<b><%= f.label(:message, t('cloudsponge.message')) %></b><br/>
+	<%= f.text_area(:message, :cols => 50, :rows => 4) %><br/>
+	<br/>
+	<div id="addressSelectionDiv">
+		<b>Look up contacts in your address book by clicking the appropriate logo:</b><br/>
+		<small><i>powered by</i> <a target='new' href='http://www.cloudsponge.com'>Cloudsponge</a></small><br/>
+		<br/>
+
+		<%= image_tag "spree/gmail_logo.jpg", :height => 30, :class => "holderWhite", :onclick => "importGmail('GMAIL')", :style => "cursor:pointer" %>
+		&nbsp; &nbsp; &nbsp;
+		<%= image_tag "spree/windows_logo.png", :height => 30, :class => "holderWhite", :onclick => "importGmail('WINDOWSLIVE')", :style => "cursor:pointer" %>
+		&nbsp; &nbsp; &nbsp;
+		<%= image_tag "spree/aol_logo.jpg", :height => 30, :class => "holderWhite", :onclick => "showAOLLogin()", :style => "cursor:pointer" %>
+		&nbsp; &nbsp; &nbsp;
+		<%= image_tag "spree/outlook_logo.png", :height => 30, :class => "holderWhite", :onclick => "importOutlook()", :style => "cursor:pointer" %>
+		&nbsp; &nbsp; &nbsp;
+		<%= image_tag "spree/osx_logo.jpg", :height => 30, :class => "holderWhite", :onclick => "importOSX()", :style => "cursor:pointer" %><br/>
+		<br/>
+		<b>OR</b> you can just type one or more emails below:<br/>
+		<b>Your Friend's Email:</b>&nbsp; <i>(separate multiple emails with a comma)</i><br/><%= f.text_field(:recipient_email) %><br/>
+		<br/>
+		<%= f.submit t('cloudsponge.send_message') %>
+	</div>
+	<div id="importGMAILLogo" style="display:none;float:left"><%= image_tag "spree/gmail_logo.jpg", :height => 50 %></div>
+	<div id="importWINDOWSLIVELogo" style="display:none;float:left"><%= image_tag "spree/windows_logo.png", :height => 50 %></div>
+	<div id="importOutlookLogo" style="display:none;float:left"><%= image_tag "spree/outlook_logo.png", :height => 50 %></div>
+	<div id="importOSXLogo" style="display:none;float:left"><%= image_tag "spree/osx_logo.jpg", :height => 50 %></div>
+	<div id="importAOLLogo" style="display:none;float:left"><%= image_tag "spree/aol_logo.jpg", :height => 50 %></div>
+	<div style="float:left;width:25px">&nbsp;</div>
+	<div id="importText" style="display:none;float:left;">&nbsp;</div>
+	<div style="clear:both">&nbsp;</div>
+	<div id="importDiv" style="display:none;padding:10px;width:690px;min-height:200px"></div>
+<% end -%>
+
+<script>
+	function importGmail(service)
+	{
+		document.getElementById("addressSelectionDiv").style.display = 'none';
+		document.getElementById("import" + service + "Logo").style.display = 'block';
+		jQuery("#importText").html("<b>Please Wait...</b>");
+		jQuery("#importDiv").html("");
+		document.getElementById("importText").style.display = 'block';
+		document.getElementById("importDiv").style.display = 'block';
+		jQuery.ajax("/importGmail/?service=" + service, {
+			complete:function(jqXHR, textStatus) {
+				jQuery("#importDiv").html(jqXHR.responseText);
+			}
+		})		
+	}
+	function showAOLLogin(){
+		document.getElementById("addressSelectionDiv").style.display = 'none';
+		document.getElementById("importAOLLogo").style.display = 'block';
+		jQuery("#importText").html("<b>Please Enter Your Username and Password:</b><br/><small><i>powered by</i></small> <a target='new' href='http://www.cloudsponge.com'>Cloudsponge</a>");
+		jQuery("#importDiv").html("<b>Username</b>: <input type='text' size='20' id='username'><br/><b>Password</b>: <input type='password' size='25' id='password'><br/><br/><input type='button' value='Get Contacts' onclick='importAOL()'>&nbsp; &nbsp;<input type='button' value='Cancel' onclick='hideAOLLogin()'>");
+		document.getElementById("importText").style.display = 'block';
+		document.getElementById("importDiv").style.display = 'block';
+	}
+	function hideAOLLogin(){
+		document.getElementById("addressSelectionDiv").style.display = 'block';
+		document.getElementById("importAOLLogo").style.display = 'none';
+		document.getElementById("importText").style.display = 'none';
+		document.getElementById("importDiv").style.display = 'none';
+	}
+	function importAOL()
+	{
+		username = document.getElementById('username').value;
+		password = document.getElementById('password').value;
+		if ((username == '') || (password == ''))
+		{
+			alert('You must enter a username and password to proceed!');
+		}
+		else
+		{
+			document.getElementById("importAOLLogo").style.display = 'block';
+			jQuery("#importText").html("<b>Please Wait...</b>");
+			jQuery("#importDiv").html("");
+			document.getElementById("importText").style.display = 'block';
+			document.getElementById("importDiv").style.display = 'block';
+			jQuery.ajax("/importAOL/?service=AOL&username=" + username + "&password=" + password, {
+				complete:function(jqXHR, textStatus) {
+					jQuery("#importDiv").html(jqXHR.responseText);
+				}
+			});
+		}
+		
+	}
+	function importOutlook()
+	{
+		document.getElementById("addressSelectionDiv").style.display = 'none';
+		document.getElementById("importOutlookLogo").style.display = 'block';
+		jQuery("#importText").html("<b>Please Wait...</b>");
+		jQuery("#importDiv").html("");
+		document.getElementById("importText").style.display = 'block';
+		document.getElementById("importDiv").style.display = 'block';
+		jQuery.ajax("/importOutlook/", {
+			complete:function(jqXHR, textStatus) {
+				jQuery("#importDiv").html(jqXHR.responseText);
+			}
+		});	
+	}
+	function importOSX()
+	{
+		document.getElementById("addressSelectionDiv").style.display = 'none';
+		document.getElementById("importOSXLogo").style.display = 'block';
+		jQuery("#importText").html("<b>Please Wait...</b>");
+		jQuery("#importDiv").html("");
+		document.getElementById("importText").style.display = 'block';
+		document.getElementById("importDiv").style.display = 'block';
+		jQuery.ajax("/importOSX/", {
+			complete:function(jqXHR, textStatus) {
+				jQuery("#importDiv").html(jqXHR.responseText);
+			}
+		});		
+	}
+</script>
+
+<!--
+<%= form_for(@mail_to_cloud, :url => email_to_cloud_path(params[:type], @object)) do |f| -%>
+  <%= render 'spree/shared/error_messages', :target => @mail_to_cloud %>
+  
+  <p>
+    <%= f.label(:sender_name, t('cloudsponge.sender_name')) %><br/>
+    <%= f.text_field(:sender_name) %>
+  </p>
+  <p>
+    <%= f.label(:sender_email, t('cloudsponge.sender_email')) %><br/>
+    <%= f.text_field(:sender_email) %>
+  </p>
+  <p>
+    <%= f.label(:recipient_email, t('cloudsponge.recipient_email')) %><br/>
+    <%= f.text_field(:recipient_email) %>
+  </p>
+  <p>
+    <%= f.label(:message, t('cloudsponge.message')) %><br/>
+    <%= f.text_area(:message) %>
+  </p>
+  <p>
+    <%= f.submit t('cloudsponge.send_message') %>
+  </p>
+<% end -%>
+-->
