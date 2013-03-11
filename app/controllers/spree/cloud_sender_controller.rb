@@ -15,7 +15,7 @@ class Spree::CloudSenderController < Spree::BaseController
   
   def importGmail    
     client = HTTPClient.new
-    body = { 'service' => params[:service], 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer_code' => 'sweet_spree' }
+    body = { 'service' => params[:service], 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer' => 'sweet_spree' }
     response = client.post('https://api.cloudsponge.com/begin_import/user_consent.json', body)
     data = ActiveSupport::JSON.decode(response.body)
     @authURL = data["url"]
@@ -28,7 +28,7 @@ class Spree::CloudSenderController < Spree::BaseController
   
   def importAOL
     client = HTTPClient.new
-    body = { 'service' => params[:service], 'username' => params[:username], 'password' => params[:password], 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer_code' => 'sweet_spree' }
+    body = { 'service' => params[:service], 'username' => params[:username], 'password' => params[:password], 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer' => 'sweet_spree' }
     response = client.post('https://api.cloudsponge.com/begin_import/import.json', body)
     data = ActiveSupport::JSON.decode(response.body)
     @importID = data["import_id"]
@@ -40,7 +40,7 @@ class Spree::CloudSenderController < Spree::BaseController
   
   def importOutlook
     client = HTTPClient.new
-    body = { 'service' => 'OUTLOOK', 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer_code' => 'sweet_spree' }
+    body = { 'service' => 'OUTLOOK', 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer' => 'sweet_spree' }
     response = client.post('https://api.cloudsponge.com/begin_import/desktop_applet.json', body)
     data = ActiveSupport::JSON.decode(response.body)
     @authURL = data["url"]
@@ -53,7 +53,7 @@ class Spree::CloudSenderController < Spree::BaseController
   
   def importOSX
     client = HTTPClient.new
-    body = { 'service' => 'ADDRESSBOOK', 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer_code' => 'sweet_spree' }
+    body = { 'service' => 'ADDRESSBOOK', 'domain_key' => Spree::Cloudsponge::Config[:domain_key], 'domain_password' => Spree::Cloudsponge::Config[:domain_password], 'referrer' => 'sweet_spree' }
     response = client.post('https://api.cloudsponge.com/begin_import/desktop_applet.json', body)
     data = ActiveSupport::JSON.decode(response.body)
     @authURL = data["url"]
