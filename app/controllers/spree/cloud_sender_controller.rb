@@ -1,5 +1,6 @@
 class Spree::CloudSenderController < Spree::BaseController
   require 'rubygems'
+  require 'httpclient'
   
   include Spree::Core::ControllerHelpers::Order
   
@@ -7,7 +8,7 @@ class Spree::CloudSenderController < Spree::BaseController
     
   def send_mail
     if request.get?
-      @mail_to_cloud = Spree::MailToCloud.new(:sender_email => current_user.try(:email))
+      @mail_to_cloud = Spree::MailToCloud.new(:sender_email => spree_current_user.try(:email))
     else
       mail_to_cloud
     end
