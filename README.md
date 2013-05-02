@@ -1,7 +1,7 @@
 spree_multi_share
 =================
 
-Extension for Spree that allows customers to share products with contacts from any of the popular cloud services (MSN, AOL, Google, Outlook, and OSX). Powered by CloudSponge.
+Extension for Spree that allows customers to share products with contacts from any of the popular cloud services (MSN, AOL, Google, Outlook, and OSX). Powered by <a href='http://www.cloudsponge.com'>CloudSponge</a>.
 
 Installation
 =================
